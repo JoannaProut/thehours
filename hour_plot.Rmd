@@ -1,0 +1,61 @@
+---
+title: "The Hours"
+author: "Joanna Prout"
+date: "6/16/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library (tidyverse)
+setwd ("C:/Users/jprout/OneDrive - University of Maryland School of Medicine/Documents/R/thehours")
+
+d <- read_csv ("hourlydata.csv")
+
+d$date <- as.Date(d$date, "%m/%d/%y")
+
+d$time <- paste (d$hour, ":00", sep = "")
+
+d$datetime <- as.POSIXct(paste(d$date, d$time), format="%Y-%m-%d %H:%M")
+
+
+```
+
+```{r}
+sm <- d %>%
+  select(datetime, mood, anx, asleep, overwhelm, lightness, rain)
+```
+
+
+```{r pivot longer?}
+long <- pivot_longer (sm, mood:rain, names_to = "experience",
+                      values_to = "value")
+
+#changing NA to 0 seems like a good idea
+long[is.na(long)] = 0
+
+```
+
+```{r}
+mood <- ggplot(long %>% filter (experience == "mood"), 
+               aes (x = datetime, y = value)) +
+  geom_area (color = "red", 
+             fill = "red") 
+
+mood
+  
+```
+
+```{r}
+
+sleep <- ggplot (long %>% filter (experience == "asleep"),
+                    aes (x=datetime, y=value)) +
+                    geom_area (fill = "blue")
+sleep
+```
+
+```{r}
+ggplot (data = long, aes (x=datetime, y=value, color = experience, fill = experience))+
+  geom_area ()
+```
+
+
