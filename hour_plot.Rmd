@@ -15,14 +15,14 @@ d$date <- as.Date(d$date, "%m/%d/%y")
 
 d$time <- paste (d$hour, ":00", sep = "")
 
-d$datetime <- as.POSIXct(paste(d$date, d$time), format="%Y-%m-%d %H:%M")
+d$datetime <- as.POSIXct(paste(d$date, d$time), format="%Y-%m-%d %H")
 
 
 ```
 
 ```{r}
 sm <- d %>%
-  select(datetime, mood, anx, asleep, overwhelm, lightness, rain)
+  select(datetime, mood, anx,overwhelm, lightness, rain, asleep)
 ```
 
 
@@ -55,7 +55,48 @@ sleep
 
 ```{r}
 ggplot (data = long, aes (x=datetime, y=value, color = experience, fill = experience))+
-  geom_area ()
+  geom_area () +
+  geom_line ()
 ```
+
+
+```{r}
+p <- ggplot() + 
+    geom_col(data = long, 
+             mapping = aes(x = datetime, 
+                           y = asleep)
+             ) + 
+    xlab("Time") + 
+ 
+    geom_area(data = long %>% 
+                filter (experience == "mood"), 
+              mapping = aes(x = datetime,
+                            y = value),
+              fill = "red"
+            
+              ) +
+    theme_bw()
+p
+```
+
+```{r}
+p + ylim (-2,2)
+```
+
+
+
+
+
+
+
+```{r}
+library (scales)
+    p + scale_x_datetime(labels = date_format("%Y-%m-%d %H"),
+                     date_breaks = "1 hour") +
+      theme (axis.text.x = element_text (angle = 45))+
+      coord_cartesian(xlim = ("2021-2020-06-12 10:00:00")
+```
+
+
 
 
