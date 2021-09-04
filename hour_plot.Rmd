@@ -7,7 +7,6 @@ output: html_document
 
 ```{r setup, include=FALSE}
 library (tidyverse)
-setwd ("C:/Users/jprout/OneDrive - University of Maryland School of Medicine/Documents/R/thehours")
 
 d <- read_csv ("hourlydata.csv")
 
@@ -38,8 +37,8 @@ long[is.na(long)] = 0
 ```{r}
 mood <- ggplot(long %>% filter (experience == "mood"), 
                aes (x = datetime, y = value)) +
-  geom_area (color = "red", 
-             fill = "red") 
+  geom_area (color = "blue", 
+             fill = "blue") 
 
 mood
   
